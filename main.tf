@@ -15,7 +15,7 @@ provider "kubernetes" {
   host                   = azurerm_kubernetes_cluster.kubernetes.kube_config.0.host
   client_certificate     = base64decode(azurerm_kubernetes_cluster.kubernetes.kube_config.0.client_certificate)
   client_key             = base64decode(azurerm_kubernetes_cluster.kubernetes.kube_config.0.client_key)
-  cluster_ca_certificate = base64decode(azurerm_kubernetes_cluster.kubernetes.kube_config.0.cluster_ca_certificate)
+  cluster_ca_certificate = base64decode(azurerm_kubernetes_cluster.kubernetes.kube_config.0^.cluster_ca_certificate)
 }
 
 provider "helm" {
@@ -133,6 +133,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "worker_node_pool" {
   min_count             = var.aks_second_nodepool_configuration.kubernetes_min_node_count
   max_count             = var.aks_second_nodepool_configuration.kubernetes_max_node_count
   vnet_subnet_id        = var.aks_subnet_id
+  mode                  = var.aks_second_nodepool_configuration.mode
   max_pods              = var.aks_second_nodepool_configuration.max_pods
   orchestrator_version  = var.aks_configuration.kubernetes_version
 }

@@ -158,6 +158,7 @@ variable "aks_second_nodepool_configuration" {
     kubernetes_enable_auto_scaling = bool
     max_pods                       = number
     node_pool_name                 = string
+    mode                           = string
   })
   default = {
     vm_size                        = "Standard_B2s"
@@ -167,7 +168,8 @@ variable "aks_second_nodepool_configuration" {
     kubernetes_max_node_count      = 1
     kubernetes_enable_auto_scaling = true
     max_pods                       = 30
-    node_pool_name                 = "workerpool"
+    node_pool_name                 = "systempool"
+    mode                           = "System"
   }
 
   validation {
@@ -178,7 +180,10 @@ variable "aks_second_nodepool_configuration" {
     condition     = var.aks_second_nodepool_configuration.os_disk_size_gb > 32
     error_message = "The value of `os_disk_size_gb` must be greater than 32."
   }
-
+  validation {
+    condition     = contains(["System", "User"], var.aks_second_nodepool_configuration.mode)
+    error_message = "The value of `aks_second_nodepool_configuration.mode` must be one of (System, User)."
+  }
 }
 
 variable "aks_second_nodepool" {
